@@ -4,7 +4,7 @@ from pygame.locals import *
 # Andre Luiz Vieira Mostaro - 22006533
 # Gabriel Gomes Bobrov Lopes - 21953131
 # Gustavo Mateus de Sousa de Santana - 21954293
-# Higor
+# Higor da Silva Rocha - 22002910
 
 pygame.init()
 
