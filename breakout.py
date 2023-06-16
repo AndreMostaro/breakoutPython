@@ -35,7 +35,7 @@ text_col = (78, 81, 139)
 # define as variaveis aplicadas ao jogo
 cols = 6
 rows = 6
-clock = pygame.time.Clock()
+clock = pygame.time.Clock() # atualizacao de tela
 fps = 60
 live_ball = False
 game_over = 0
@@ -54,29 +54,27 @@ class wall():
 	# funcao de criacao do bloco de tijolos e forma a parede
 	def create_wall(self):
 		self.blocks = []
-		#define an empty list for an individual block
 		block_individual = []
 		for row in range(rows):
-			#reset the block row list
 			block_row = []
-			#iterate through each column in that row
+			# faz iteracao por cada coluna na linha
 			for col in range(cols):
-				#generate x and y positions for each block and create a rectangle from that
+				# gera as posições x e y para cada bloco e cria um retângulo
 				block_x = col * self.width
 				block_y = row * self.height
 				rect = pygame.Rect(block_x, block_y, self.width, self.height)
-				#assign block strength based on row
+				# atribuir força de bloqueio com base na linha
 				if row < 2:
 					strength = 3
 				elif row < 4:
 					strength = 2
 				elif row < 6:
 					strength = 1
-				#create a list at this point to store the rect and colour data
+					# cria uma lista para armazenar os dados de retângulo e forca
 				block_individual = [rect, strength]
-				#append that individual block to the block row
+				# adiciona o bloco individual na linha
 				block_row.append(block_individual)
-			#append the row to the full list of blocks
+			# adiciona a linha na lista de blocos
 			self.blocks.append(block_row)
 
 	# funcao de desenho da parede com as cores setadas
@@ -130,58 +128,58 @@ class game_ball():
 
 	# funcao de movimento da bolinha
 	def move(self):
-		#collision threshold
+		# define o limiar de colisao
 		collision_thresh = 5
-		#start off with the assumption that the wall has been destroyed completely
+		# inicia supondo que a parede esta toda destruida
 		wall_destroyed = 1
 		row_count = 0
 		for row in wall.blocks:
 			item_count = 0
 			for item in row:
-				#check collision
+				# checa colisao
 				if self.rect.colliderect(item[0]):
-					#check if collision was from above
+					# colisao de cima
 					if abs(self.rect.bottom - item[0].top) < collision_thresh and self.speed_y > 0:
 						self.speed_y *= -1
-					#check if collision was from below
+					# colisao por baixo
 					if abs(self.rect.top - item[0].bottom) < collision_thresh and self.speed_y < 0:
-						self.speed_y *= -1						
-					#check if collision was from left
+						self.speed_y *= -1
+					# colisao pela esquerda
 					if abs(self.rect.right - item[0].left) < collision_thresh and self.speed_x > 0:
 						self.speed_x *= -1
-					#check if collision was from right
+					# colisao pela direita
 					if abs(self.rect.left - item[0].right) < collision_thresh and self.speed_x < 0:
 						self.speed_x *= -1
-					#reduce the block's strength by doing damage to it
+					# reduz a vida dos blocos (causa dano)
 					if wall.blocks[row_count][item_count][1] > 1:
 						wall.blocks[row_count][item_count][1] -= 1
 					else:
 						wall.blocks[row_count][item_count][0] = (0, 0, 0, 0)
 
-				#check if block still exists, in whcih case the wall is not destroyed
+				# verifica se o bloco ainda existe qdo a parede nao esta toda destruida
 				if wall.blocks[row_count][item_count][0] != (0, 0, 0, 0):
 					wall_destroyed = 0
-				#increase item counter
+
 				item_count += 1
-			#increase row counter
+
 			row_count += 1
-		#after iterating through all the blocks, check if the wall is destroyed
+		# percorre todos os blocos e verifica se a parede foi destruída
 		if wall_destroyed == 1:
 			self.game_over = 1
 
-		#check for collision with walls
+		# verifica se ha colisao com paredes da tela
 		if self.rect.left < 0 or self.rect.right > screen_width:
 			self.speed_x *= -1
 
-		#check for collision with top and bottom of the screen
+		# verifica se ha colisao com as partes de cima e baixo da tela
 		if self.rect.top < 0:
 			self.speed_y *= -1
 		if self.rect.bottom > screen_height:
 			self.game_over = -1
 
-		#look for collission with paddle
+		# colisao com a barra
 		if self.rect.colliderect(player_paddle):
-			#check if colliding from the top
+			# verifica colisa por cima (unica possivel)
 			if abs(self.rect.bottom - player_paddle.rect.top) < collision_thresh and self.speed_y > 0:
 				self.speed_y *= -1
 				self.speed_x += player_paddle.direction
