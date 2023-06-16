@@ -33,10 +33,12 @@ paddle_outline = (100, 100, 100)
 text_col = (78, 81, 139)
 
 # define as variaveis aplicadas ao jogo
-cols = 6
-rows = 6
+
+cols = 6 # aumento a qtdade de colunas por linhas de blocos
+rows = 6 # aumento a qtdade de linhas de blocos
 clock = pygame.time.Clock() # atualizacao de tela
-fps = 60
+
+fps = 60 # quanto maior fps, maior velocidade
 live_ball = False
 game_over = 0
 
@@ -48,7 +50,7 @@ def draw_text(text, font, text_col, x, y):
 # define a classe da parede de tijolos
 class wall():
 	def __init__(self):
-		self.width = screen_width // cols
+		self.width = screen_width // cols # define o comp de cada bloco dividindo o tamanho da tela pela qtdade de colunas de blocos
 		self.height = 50
 
 	# funcao de criacao do bloco de tijolos e forma a parede
